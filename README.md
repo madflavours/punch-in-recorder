@@ -1,6 +1,6 @@
 # Office / WFH Recorder
 
-A simple monthly calendar for marking work days as either Office or WFH.
+A simple monthly calendar for tracking Office, WFH, and a few work-day labels.
 
 ## Run Locally
 
@@ -25,3 +25,7 @@ Deploy the project root as a static site. No build command or output directory i
 Selections are saved in the browser using IndexedDB. This keeps the app simple for single-user personal tracking and works well with static hosting on Vercel.
 
 Data is stored per browser/device. Clearing site data for the deployed app will clear the saved records.
+
+## Labels
+
+Office is the default for any day that is not marked as WFH. WFH fills the day in yellow. Second-Shift, Comp-Off, and Expensify-Logged can be combined on the same day and appear as colored stars.

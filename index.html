@@ -12,10 +12,11 @@
         --text: #171717;
         --muted: #6b7280;
         --line: #d8dde5;
-        --office: #1f8f55;
-        --office-dark: #15663d;
-        --wfh: #2563eb;
-        --wfh-dark: #1d4ed8;
+        --wfh: #facc15;
+        --wfh-line: #d4a806;
+        --second-shift: #dc2626;
+        --comp-off: #2563eb;
+        --expensify: #16a34a;
         --shadow: 0 16px 40px rgba(23, 23, 23, 0.08);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
@@ -70,7 +71,8 @@
       }
 
       .month-controls,
-      .mode-row,
+      .controls-panel,
+      .label-row,
       .summary {
         display: flex;
         align-items: center;
@@ -79,17 +81,17 @@
 
       .icon-button,
       .today-button,
-      .mode-button {
+      .marker-button {
         border: 1px solid var(--line);
         background: var(--surface);
         color: var(--text);
         cursor: pointer;
-        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
       }
 
       .icon-button:hover,
       .today-button:hover,
-      .mode-button:hover {
+      .marker-button:hover {
         transform: translateY(-1px);
         border-color: #aab3c2;
       }
@@ -105,7 +107,7 @@
       }
 
       .today-button,
-      .mode-button {
+      .marker-button {
         display: inline-flex;
         min-height: 42px;
         align-items: center;
@@ -116,24 +118,92 @@
         font-weight: 700;
       }
 
-      .mode-row {
+      .controls-panel {
+        align-items: flex-end;
+        flex-wrap: wrap;
         margin-bottom: 18px;
       }
 
-      .mode-button {
-        min-width: 128px;
+      .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
       }
 
-      .mode-button.office.active {
-        border-color: var(--office);
-        background: var(--office);
-        color: #ffffff;
+      .labels-group {
+        flex: 1;
+        min-width: 280px;
       }
 
-      .mode-button.wfh.active {
-        border-color: var(--wfh);
+      .control-label {
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .label-row {
+        flex-wrap: wrap;
+      }
+
+      .marker-button.active {
+        border-color: #111827;
+        box-shadow: inset 0 0 0 2px #111827;
+      }
+
+      .marker-button.wfh-action.active {
+        border-color: var(--wfh-line);
         background: var(--wfh);
+        color: #111827;
+      }
+
+      .marker-button.second-shift-action.active {
+        border-color: var(--second-shift);
+        background: #fff1f1;
+      }
+
+      .marker-button.comp-off-action.active {
+        border-color: var(--comp-off);
+        background: #eff6ff;
+      }
+
+      .marker-button.expensify-action.active {
+        border-color: var(--expensify);
+        background: #ecfdf3;
+      }
+
+      .marker-button.clear-action.active {
+        border-color: #111827;
+        background: #111827;
         color: #ffffff;
+      }
+
+      .swatch {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        border: 1px solid rgba(17, 24, 39, 0.18);
+      }
+
+      .wfh-swatch {
+        background: var(--wfh);
+      }
+
+      .star-icon {
+        font-size: 1rem;
+        line-height: 1;
+      }
+
+      .second-shift-star {
+        color: var(--second-shift);
+      }
+
+      .comp-off-star {
+        color: var(--comp-off);
+      }
+
+      .expensify-star {
+        color: var(--expensify);
       }
 
       .calendar-wrap {
@@ -211,14 +281,9 @@
         outline-offset: -2px;
       }
 
-      .day.office {
-        background: var(--office);
-        color: #ffffff;
-      }
-
       .day.wfh {
         background: var(--wfh);
-        color: #ffffff;
+        color: #111827;
       }
 
       .day.today::after {
@@ -237,10 +302,36 @@
         font-weight: 800;
       }
 
-      .status-label {
-        align-self: flex-end;
-        font-size: 0.82rem;
-        font-weight: 800;
+      .day-footer {
+        display: flex;
+        width: 100%;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .tag-stars {
+        display: flex;
+        min-height: 22px;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .tag-star {
+        font-size: 1.22rem;
+        font-weight: 900;
+        line-height: 1;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+      }
+
+      .wfh-badge {
+        border: 1px solid rgba(17, 24, 39, 0.35);
+        border-radius: 6px;
+        padding: 2px 6px;
+        font-size: 0.72rem;
+        font-weight: 900;
+        line-height: 1.2;
       }
 
       .summary {
@@ -263,8 +354,9 @@
         font-size: 1.05rem;
       }
 
-      .summary-item.muted {
-        color: var(--muted);
+      .summary-star {
+        font-size: 1rem;
+        line-height: 1;
       }
 
       .dot {
@@ -274,16 +366,13 @@
       }
 
       .office-dot {
-        background: var(--office-dark);
+        border: 1px solid #9ca3af;
+        background: #ffffff;
       }
 
       .wfh-dot {
-        background: var(--wfh-dark);
-      }
-
-      .empty-dot {
-        border: 1px solid #9ca3af;
-        background: #ffffff;
+        border: 1px solid var(--wfh-line);
+        background: var(--wfh);
       }
 
       @media (max-width: 760px) {
@@ -303,16 +392,19 @@
         }
 
         .month-controls,
-        .mode-row {
+        .controls-panel,
+        .label-row {
           width: 100%;
         }
 
-        .today-button {
+        .today-button,
+        .marker-button {
           flex: 1;
         }
 
-        .mode-button {
-          flex: 1;
+        .control-group,
+        .labels-group {
+          width: 100%;
           min-width: 0;
         }
 
@@ -322,7 +414,7 @@
         }
 
         .day {
-          min-height: 72px;
+          min-height: 78px;
           padding: 8px;
         }
 
@@ -330,8 +422,13 @@
           font-size: 0.98rem;
         }
 
-        .status-label {
-          font-size: 0.68rem;
+        .tag-star {
+          font-size: 1rem;
+        }
+
+        .wfh-badge {
+          padding: 2px 5px;
+          font-size: 0.64rem;
         }
       }
     </style>
@@ -358,21 +455,43 @@
         </div>
       </section>
 
-      <section class="mode-row" aria-label="Work location">
-        <button class="mode-button office active" id="officeMode" type="button" data-mode="office">
-          <span aria-hidden="true">■</span>
-          Office
-        </button>
-        <button class="mode-button wfh" id="wfhMode" type="button" data-mode="wfh">
-          <span aria-hidden="true">■</span>
-          WFH
-        </button>
+      <section class="controls-panel" aria-label="Marker controls">
+        <div class="control-group">
+          <p class="control-label">Day type</p>
+          <button class="marker-button wfh-action active" id="wfhAction" type="button" data-action="wfh">
+            <span class="swatch wfh-swatch" aria-hidden="true"></span>
+            WFH
+          </button>
+        </div>
+
+        <div class="control-group labels-group">
+          <p class="control-label">Star labels</p>
+          <div class="label-row">
+            <button class="marker-button second-shift-action" id="secondShiftAction" type="button" data-action="secondShift">
+              <span class="star-icon second-shift-star" aria-hidden="true">★</span>
+              Second-Shift
+            </button>
+            <button class="marker-button comp-off-action" id="compOffAction" type="button" data-action="compOff">
+              <span class="star-icon comp-off-star" aria-hidden="true">★</span>
+              Comp-Off
+            </button>
+            <button class="marker-button expensify-action" id="expensifyAction" type="button" data-action="expensifyLogged">
+              <span class="star-icon expensify-star" aria-hidden="true">★</span>
+              Expensify-Logged
+            </button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <p class="control-label">Edit</p>
+          <button class="marker-button clear-action" id="clearAction" type="button" data-action="clear">Clear day</button>
+        </div>
       </section>
 
       <section class="calendar-wrap" id="calendar" aria-label="Monthly calendar">
         <div class="calendar-heading">
           <h2 id="monthLabel"></h2>
-          <p id="helperText">Loading saved days...</p>
+          <p id="helperText">Selected: WFH</p>
         </div>
 
         <div class="weekdays" aria-hidden="true">
@@ -399,38 +518,61 @@
           <strong id="wfhCount">0</strong>
           <span>WFH</span>
         </div>
-        <div class="summary-item muted">
-          <span class="dot empty-dot"></span>
-          <strong id="unmarkedCount">0</strong>
-          <span>Unmarked</span>
+        <div class="summary-item">
+          <span class="summary-star second-shift-star" aria-hidden="true">★</span>
+          <strong id="secondShiftCount">0</strong>
+          <span>Second-Shift</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-star comp-off-star" aria-hidden="true">★</span>
+          <strong id="compOffCount">0</strong>
+          <span>Comp-Off</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-star expensify-star" aria-hidden="true">★</span>
+          <strong id="expensifyCount">0</strong>
+          <span>Expensify</span>
         </div>
       </section>
     </main>
+
     <script>
       const DB_NAME = "office-wfh-recorder";
       const STORE_NAME = "day-records";
-      const STATUS = {
-        OFFICE: "office",
-        WFH: "wfh",
+      const WFH_ACTION = "wfh";
+      const CLEAR_ACTION = "clear";
+      const TAGS = [
+        { id: "secondShift", label: "Second-Shift", className: "second-shift-star" },
+        { id: "compOff", label: "Comp-Off", className: "comp-off-star" },
+        { id: "expensifyLogged", label: "Expensify-Logged", className: "expensify-star" },
+      ];
+      const TAG_IDS = TAGS.map((tag) => tag.id);
+      const ACTION_LABELS = {
+        [WFH_ACTION]: "WFH",
+        [CLEAR_ACTION]: "Clear day",
+        secondShift: "Second-Shift",
+        compOff: "Comp-Off",
+        expensifyLogged: "Expensify-Logged",
       };
 
       let activeMonth = new Date();
-      let selectedMode = STATUS.OFFICE;
+      let activeAction = WFH_ACTION;
       let records = {};
 
       const elements = {
+        actionButtons: document.querySelectorAll("[data-action]"),
         calendar: document.querySelector("#calendar"),
         calendarGrid: document.querySelector("#calendarGrid"),
+        compOffCount: document.querySelector("#compOffCount"),
+        expensifyCount: document.querySelector("#expensifyCount"),
         helperText: document.querySelector("#helperText"),
         monthLabel: document.querySelector("#monthLabel"),
         nextMonth: document.querySelector("#nextMonth"),
         officeCount: document.querySelector("#officeCount"),
-        officeMode: document.querySelector("#officeMode"),
         previousMonth: document.querySelector("#previousMonth"),
+        secondShiftCount: document.querySelector("#secondShiftCount"),
         todayButton: document.querySelector("#todayButton"),
-        unmarkedCount: document.querySelector("#unmarkedCount"),
         wfhCount: document.querySelector("#wfhCount"),
-        wfhMode: document.querySelector("#wfhMode"),
       };
 
       function openDatabase() {
@@ -446,6 +588,21 @@
         });
       }
 
+      function normalizeRecord(record) {
+        const selectedTags = Array.isArray(record?.tags)
+          ? record.tags.filter((tagId, index, tags) => TAG_IDS.includes(tagId) && tags.indexOf(tagId) === index)
+          : [];
+
+        return {
+          wfh: Boolean(record?.wfh || record?.status === "wfh"),
+          tags: selectedTags,
+        };
+      }
+
+      function hasRecordValue(record) {
+        return Boolean(record?.wfh || record?.tags?.length);
+      }
+
       async function getRecords() {
         const db = await openDatabase();
 
@@ -456,7 +613,10 @@
           request.onsuccess = () => {
             const nextRecords = {};
             request.result.forEach((record) => {
-              nextRecords[record.date] = record.status;
+              const normalized = normalizeRecord(record);
+              if (hasRecordValue(normalized)) {
+                nextRecords[record.date] = normalized;
+              }
             });
             resolve(nextRecords);
           };
@@ -465,15 +625,16 @@
         });
       }
 
-      async function saveRecord(date, status) {
+      async function saveRecord(date, record) {
         const db = await openDatabase();
+        const normalized = normalizeRecord(record);
 
         return new Promise((resolve, reject) => {
           const tx = db.transaction(STORE_NAME, "readwrite");
           const store = tx.objectStore(STORE_NAME);
 
-          if (status) {
-            store.put({ date, status });
+          if (hasRecordValue(normalized)) {
+            store.put({ date, wfh: normalized.wfh, tags: normalized.tags });
           } else {
             store.delete(date);
           }
@@ -520,24 +681,42 @@
         return new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(date);
       }
 
-      function setSelectedMode(mode) {
-        selectedMode = mode;
-        elements.officeMode.classList.toggle("active", selectedMode === STATUS.OFFICE);
-        elements.wfhMode.classList.toggle("active", selectedMode === STATUS.WFH);
+      function setActiveAction(action) {
+        activeAction = action;
+        elements.actionButtons.forEach((button) => {
+          button.classList.toggle("active", button.dataset.action === activeAction);
+        });
+        elements.helperText.textContent = `Selected: ${ACTION_LABELS[activeAction]}`;
       }
 
       async function updateDay(date) {
         const key = toDateKey(date);
-        const nextStatus = records[key] === selectedMode ? null : selectedMode;
 
-        if (nextStatus) {
-          records[key] = nextStatus;
+        if (activeAction === CLEAR_ACTION) {
+          delete records[key];
+          render();
+          await saveRecord(key, null);
+          return;
+        }
+
+        const current = normalizeRecord(records[key]);
+
+        if (activeAction === WFH_ACTION) {
+          current.wfh = !current.wfh;
+        } else if (TAG_IDS.includes(activeAction)) {
+          current.tags = current.tags.includes(activeAction)
+            ? current.tags.filter((tagId) => tagId !== activeAction)
+            : [...current.tags, activeAction];
+        }
+
+        if (hasRecordValue(current)) {
+          records[key] = current;
         } else {
           delete records[key];
         }
 
         render();
-        await saveRecord(key, nextStatus);
+        await saveRecord(key, records[key]);
       }
 
       function changeMonth(offset) {
@@ -545,19 +724,61 @@
         render();
       }
 
+      function getDayLabel(date, monthLabel, record) {
+        const labels = [`${date.getDate()} ${monthLabel}`];
+
+        if (record.wfh) {
+          labels.push("WFH");
+        } else {
+          labels.push("Office");
+        }
+
+        TAGS.forEach((tag) => {
+          if (record.tags.includes(tag.id)) {
+            labels.push(tag.label);
+          }
+        });
+
+        return labels.join(", ");
+      }
+
+      function renderStars(record) {
+        const starWrap = document.createElement("span");
+        starWrap.className = "tag-stars";
+
+        TAGS.forEach((tag) => {
+          if (!record.tags.includes(tag.id)) {
+            return;
+          }
+
+          const star = document.createElement("span");
+          star.className = `tag-star ${tag.className}`;
+          star.textContent = "★";
+          star.title = tag.label;
+          star.setAttribute("aria-hidden", "true");
+          starWrap.append(star);
+        });
+
+        return starWrap;
+      }
+
       function render() {
         const days = getMonthDays(activeMonth);
         const monthKeys = days.filter(Boolean).map(toDateKey);
-        const officeCount = monthKeys.filter((key) => records[key] === STATUS.OFFICE).length;
-        const wfhCount = monthKeys.filter((key) => records[key] === STATUS.WFH).length;
-        const unmarkedCount = monthKeys.length - officeCount - wfhCount;
+        const monthRecords = monthKeys.map((key) => normalizeRecord(records[key]));
+        const wfhCount = monthRecords.filter((record) => record.wfh).length;
+        const secondShiftCount = monthRecords.filter((record) => record.tags.includes("secondShift")).length;
+        const compOffCount = monthRecords.filter((record) => record.tags.includes("compOff")).length;
+        const expensifyCount = monthRecords.filter((record) => record.tags.includes("expensifyLogged")).length;
         const monthLabel = formatMonth(activeMonth);
 
         elements.monthLabel.textContent = monthLabel;
         elements.calendar.setAttribute("aria-label", `${monthLabel} calendar`);
-        elements.officeCount.textContent = officeCount;
+        elements.officeCount.textContent = monthKeys.length - wfhCount;
         elements.wfhCount.textContent = wfhCount;
-        elements.unmarkedCount.textContent = unmarkedCount;
+        elements.secondShiftCount.textContent = secondShiftCount;
+        elements.compOffCount.textContent = compOffCount;
+        elements.expensifyCount.textContent = expensifyCount;
         elements.calendarGrid.replaceChildren();
 
         days.forEach((date) => {
@@ -569,24 +790,33 @@
           }
 
           const key = toDateKey(date);
-          const status = records[key];
+          const record = normalizeRecord(records[key]);
           const dayButton = document.createElement("button");
           const dateNumber = document.createElement("span");
+          const hasFooter = record.wfh || record.tags.length > 0;
 
-          dayButton.className = `day ${status || ""} ${key === toDateKey(new Date()) ? "today" : ""}`;
+          dayButton.className = `day ${record.wfh ? "wfh" : ""} ${key === toDateKey(new Date()) ? "today" : ""}`;
           dayButton.type = "button";
-          dayButton.setAttribute("aria-label", `${date.getDate()} ${monthLabel}${status ? `, ${status}` : ""}`);
+          dayButton.setAttribute("aria-label", getDayLabel(date, monthLabel, record));
           dayButton.addEventListener("click", () => updateDay(date));
 
           dateNumber.className = "date-number";
           dateNumber.textContent = date.getDate();
           dayButton.append(dateNumber);
 
-          if (status) {
-            const statusLabel = document.createElement("span");
-            statusLabel.className = "status-label";
-            statusLabel.textContent = status === STATUS.OFFICE ? "Office" : "WFH";
-            dayButton.append(statusLabel);
+          if (hasFooter) {
+            const footer = document.createElement("span");
+            footer.className = "day-footer";
+            footer.append(renderStars(record));
+
+            if (record.wfh) {
+              const wfhBadge = document.createElement("span");
+              wfhBadge.className = "wfh-badge";
+              wfhBadge.textContent = "WFH";
+              footer.append(wfhBadge);
+            }
+
+            dayButton.append(footer);
           }
 
           elements.calendarGrid.append(dayButton);
@@ -599,8 +829,9 @@
         activeMonth = new Date();
         render();
       });
-      elements.officeMode.addEventListener("click", () => setSelectedMode(STATUS.OFFICE));
-      elements.wfhMode.addEventListener("click", () => setSelectedMode(STATUS.WFH));
+      elements.actionButtons.forEach((button) => {
+        button.addEventListener("click", () => setActiveAction(button.dataset.action));
+      });
 
       getRecords()
         .then((storedRecords) => {
@@ -610,9 +841,7 @@
           elements.helperText.textContent = "Saved days could not be loaded in this browser.";
         })
         .finally(() => {
-          if (elements.helperText.textContent === "Loading saved days...") {
-            elements.helperText.textContent = "Click a date to mark it. Click the same date again to clear it.";
-          }
+          setActiveAction(WFH_ACTION);
           render();
         });
     </script>
