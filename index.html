@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Office / WFH Recorder</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="toolbar" aria-label="Calendar controls">
+        <div>
+          <p class="eyebrow">Personal tracker</p>
+          <h1>Office / WFH Recorder</h1>
+        </div>
+
+        <div class="month-controls">
+          <button class="icon-button" id="previousMonth" type="button" aria-label="Previous month">
+            <span aria-hidden="true">‹</span>
+          </button>
+          <button class="today-button" id="todayButton" type="button">
+            <span aria-hidden="true">▣</span>
+            Today
+          </button>
+          <button class="icon-button" id="nextMonth" type="button" aria-label="Next month">
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="mode-row" aria-label="Work location">
+        <button class="mode-button office active" id="officeMode" type="button" data-mode="office">
+          <span aria-hidden="true">■</span>
+          Office
+        </button>
+        <button class="mode-button wfh" id="wfhMode" type="button" data-mode="wfh">
+          <span aria-hidden="true">■</span>
+          WFH
+        </button>
+      </section>
+
+      <section class="calendar-wrap" id="calendar" aria-label="Monthly calendar">
+        <div class="calendar-heading">
+          <h2 id="monthLabel"></h2>
+          <p id="helperText">Loading saved days...</p>
+        </div>
+
+        <div class="weekdays" aria-hidden="true">
+          <span>Sun</span>
+          <span>Mon</span>
+          <span>Tue</span>
+          <span>Wed</span>
+          <span>Thu</span>
+          <span>Fri</span>
+          <span>Sat</span>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </section>
+
+      <section class="summary" aria-label="Monthly summary">
+        <div class="summary-item">
+          <span class="dot office-dot"></span>
+          <strong id="officeCount">0</strong>
+          <span>Office</span>
+        </div>
+        <div class="summary-item">
+          <span class="dot wfh-dot"></span>
+          <strong id="wfhCount">0</strong>
+          <span>WFH</span>
+        </div>
+        <div class="summary-item muted">
+          <span class="dot empty-dot"></span>
+          <strong id="unmarkedCount">0</strong>
+          <span>Unmarked</span>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
